@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { GeistSans, GeistMono } from "geist/font";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "next-themes";
@@ -32,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} antialiased bg-background text-foreground`}
+        className="antialiased bg-background text-foreground"
       >
         <ThemeProvider
           attribute="class"
