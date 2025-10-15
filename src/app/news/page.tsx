@@ -126,6 +126,7 @@ function NewsPageContent() {
       }
 
       if (selectedCategory !== 'all') {
+        // Handle both category names and ObjectIds
         params.append('category', selectedCategory);
       }
 
@@ -460,9 +461,8 @@ function NewsPageContent() {
               variant={selectedCategory === 'all' ? 'default' : 'outline'} 
               size="sm"
               onClick={() => {
-                const url = new URL(window.location.href);
-                url.searchParams.delete('category');
-                window.location.href = url.toString();
+                setSelectedCategory('all');
+                setCurrentPage(1);
               }}
               className="text-xs"
             >
@@ -476,9 +476,8 @@ function NewsPageContent() {
                   variant={selectedCategory === cat.name ? 'default' : 'outline'} 
                   size="sm"
                   onClick={() => {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('category', cat.name);
-                    window.location.href = url.toString();
+                    setSelectedCategory(cat.name);
+                    setCurrentPage(1);
                   }}
                   className="text-xs"
                 >
@@ -512,7 +511,10 @@ function NewsPageContent() {
               </form>
 
               {/* Category Filter */}
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <Select value={selectedCategory} onValueChange={(value) => {
+                setSelectedCategory(value);
+                setCurrentPage(1);
+              }}>
                 <SelectTrigger>
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>

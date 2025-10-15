@@ -22,7 +22,18 @@ export function Navbar() {
 
   useEffect(() => {
     setIsMounted(true);
+    // Initialize theme from localStorage or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
   }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -79,7 +90,7 @@ export function Navbar() {
 
             <button
               aria-label="Toggle theme"
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              onClick={toggleTheme}
               className="h-9 w-9 rounded p-1"
             >
               {theme === "light" ? (
