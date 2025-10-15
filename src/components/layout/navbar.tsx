@@ -7,7 +7,6 @@ import { Search, Menu, Sun, Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import SearchBar from "@/components/search/SearchBar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useTheme } from "next-themes";
 import { fetchCategories } from "@/lib/api";
 import Ticker from "@/components/ticker/Ticker";
 import LanguageNav from "@/components/layout/LanguageNav";
@@ -18,7 +17,7 @@ export function Navbar() {
   const [categories, setCategories] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const [theme, setTheme] = useState("light");
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
