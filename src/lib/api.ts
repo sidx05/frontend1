@@ -1,7 +1,7 @@
 // src/lib/api.ts
 const API_HOST = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
-// Backend (Render) mounts public endpoints at root, not under /api
-const PUBLIC_BASE = `${API_HOST}`;
+// Render backend mounts all routes under /api
+const PUBLIC_BASE = `${API_HOST}/api`;
 
 async function safeJson(res: Response) {
   let json: any = null;
@@ -19,7 +19,6 @@ function normalizeArrayResponse(json: any): any[] {
   if (Array.isArray(json.data)) return json.data;
   if (Array.isArray(json?.articles)) return json.articles;
   if (Array.isArray(json?.data?.articles)) return json.data.articles;
-
   if (json.success && Array.isArray(json.data)) return json.data;
   
   return [];
@@ -32,9 +31,10 @@ export async function fetchCategoryBySlug(slug: string) {
   return json; // backend returns { success, category, articles }
 }
 
-
-export async function fetchCategories() {
-  const res = await fetch(`${PUBLIC_BASE}/categories`, { cache: "no-store" });
+export async function fetchCategories(lang?: string) {
+  const url = new URL(`${PUBLIC_BASE}/categories`);
+  if (lang && lang !== 'all') url.searchParams.set('lang', lang);
+  const res = await fetch(url.toString(), { cache: "no-store" });
   const json = await safeJson(res);
   return normalizeArrayResponse(json);
 }
@@ -45,7 +45,7 @@ export async function fetchCategories() {
  * Returns an array (possibly empty).
  */
 export async function fetchArticles(options?: Record<string, any>) {
-  const url = new URL(`${PUBLIC_BASE}/public/articles`);
+  const url = new URL(`${PUBLIC_BASE}/news`);
   if (options) {
     Object.entries(options).forEach(([k, v]) => {
       if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
@@ -58,7 +58,7 @@ export async function fetchArticles(options?: Record<string, any>) {
 
 export async function fetchArticleBySlug(slug: string) {
   if (!slug) throw new Error("Missing slug");
-  const res = await fetch(`${PUBLIC_BASE}/public/articles/${encodeURIComponent(slug)}`, {
+  const res = await fetch(`${PUBLIC_BASE}/articles/${encodeURIComponent(slug)}`, {
     cache: "no-store",
   });
   const json = await safeJson(res);
