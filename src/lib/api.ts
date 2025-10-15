@@ -45,7 +45,7 @@ export async function fetchCategories(lang?: string) {
  * Returns an array (possibly empty).
  */
 export async function fetchArticles(options?: Record<string, any>) {
-  const url = new URL(`${PUBLIC_BASE}/news`);
+  const url = new URL(`${PUBLIC_BASE}/public/articles`);
   if (options) {
     Object.entries(options).forEach(([k, v]) => {
       if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
@@ -58,7 +58,7 @@ export async function fetchArticles(options?: Record<string, any>) {
 
 export async function fetchArticleBySlug(slug: string) {
   if (!slug) throw new Error("Missing slug");
-  const res = await fetch(`${PUBLIC_BASE}/articles/${encodeURIComponent(slug)}`, {
+  const res = await fetch(`${PUBLIC_BASE}/public/articles/${encodeURIComponent(slug)}`, {
     cache: "no-store",
   });
   const json = await safeJson(res);
