@@ -32,10 +32,6 @@ export async function PATCH(
     
     await source.save();
     
-    // Update source configuration
-    const sourceConfigService = new SourceConfigService();
-    await sourceConfigService.syncWithDatabase();
-    
     return NextResponse.json({
       success: true,
       source: source,
@@ -67,10 +63,6 @@ export async function DELETE(
     }
     
     await Source.findByIdAndDelete(params.id);
-    
-    // Update source configuration
-    const sourceConfigService = new SourceConfigService();
-    await sourceConfigService.syncWithDatabase();
     
     return NextResponse.json({
       success: true,
