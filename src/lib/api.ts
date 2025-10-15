@@ -1,6 +1,7 @@
 // src/lib/api.ts
 const API_HOST = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
-const PUBLIC_BASE = `${API_HOST}/api`; // Backend routes are mounted at /api
+// Backend (Render) mounts public endpoints at root, not under /api
+const PUBLIC_BASE = `${API_HOST}`;
 
 async function safeJson(res: Response) {
   let json: any = null;
@@ -25,7 +26,7 @@ function normalizeArrayResponse(json: any): any[] {
 }
 
 export async function fetchCategoryBySlug(slug: string) {
-  const res = await fetch(`${API_HOST}/api/categories/${slug}`);
+  const res = await fetch(`${PUBLIC_BASE}/categories/${slug}`);
   if (!res.ok) throw new Error("Failed to fetch category");
   const json = await res.json();
   return json; // backend returns { success, category, articles }
@@ -44,7 +45,7 @@ export async function fetchCategories() {
  * Returns an array (possibly empty).
  */
 export async function fetchArticles(options?: Record<string, any>) {
-  const url = new URL(`${PUBLIC_BASE}/news`);
+  const url = new URL(`${PUBLIC_BASE}/public/articles`);
   if (options) {
     Object.entries(options).forEach(([k, v]) => {
       if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
@@ -57,7 +58,7 @@ export async function fetchArticles(options?: Record<string, any>) {
 
 export async function fetchArticleBySlug(slug: string) {
   if (!slug) throw new Error("Missing slug");
-  const res = await fetch(`${PUBLIC_BASE}/articles/${encodeURIComponent(slug)}`, {
+  const res = await fetch(`${PUBLIC_BASE}/public/articles/${encodeURIComponent(slug)}`, {
     cache: "no-store",
   });
   const json = await safeJson(res);
