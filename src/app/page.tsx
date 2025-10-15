@@ -474,64 +474,18 @@ export default function HomePage() {
       <Navbar />
       <main className="pt-32 pb-16">
         <div className="container mx-auto px-4">
-          {/* Featured */}
+          {/* Hero - Always show Explore News banner */}
           <section className="mb-12">
             <div className="relative h-96 md:h-[500px] rounded-2xl overflow-hidden">
-              {featuredArticles.length > 0 ? (
-                featuredArticles.map((article, index) => (
-                  <motion.div key={`featured-${article.id || `fallback-${index}`}-${index}`} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: index === currentSlide ? 1 : 0 }} transition={{ duration: 0.5 }}>
-                    {article.image ? (
-                      <div
-                        className="relative h-full bg-cover bg-center"
-                        style={{ backgroundImage: `url(${article.image})` }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                        <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                          <Badge variant="secondary" className="mb-4">{sanitizeText(article.category)}</Badge>
-                          <h1 className="text-3xl md:text-5xl font-bold mb-4">
-                            <Link href={`/articles/${article.slug}`} className="text-white no-underline">{article.title}</Link>
-                          </h1>
-                          <p className="text-lg md:text-xl mb-4 max-w-3xl">{article.summary}</p>
-                          <div className="flex items-center gap-4 text-sm">
-                            <div className="flex items-center gap-1"><Clock className="h-4 w-4" />{article.time}</div>
-                            <div className="flex items-center gap-1"><Eye className="h-4 w-4" />{article.readTime}</div>
-                            <Button variant="secondary" size="sm" onClick={() => router.push(`/articles/${article.slug}`)}>
-                              Read More <ArrowRight className="h-4 w-4 ml-1" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="relative h-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
-                        <div className="text-center p-8">
-                          <Badge variant="secondary" className="mb-4">{sanitizeText(article.category)}</Badge>
-                          <h1 className="text-3xl md:text-5xl font-bold mb-4">
-                            <Link href={`/articles/${article.slug}`} className="text-white no-underline">{article.title}</Link>
-                          </h1>
-                          <p className="text-lg md:text-xl mb-4 max-w-3xl">{article.summary}</p>
-                          <div className="flex items-center gap-4 text-sm justify-center">
-                            <div className="flex items-center gap-1"><Clock className="h-4 w-4" />{article.time}</div>
-                            <div className="flex items-center gap-1"><Eye className="h-4 w-4" />{article.readTime}</div>
-                            <Button variant="secondary" size="sm" onClick={() => router.push(`/articles/${article.slug}`)}>
-                              Read More <ArrowRight className="h-4 w-4 ml-1" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ))
-              ) : (
-                <div className="relative h-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
-                  <div className="text-center p-8">
-                    <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to NewsHub</h1>
-                    <p className="text-lg md:text-xl mb-4 max-w-3xl">Stay updated with the latest news from around the world</p>
-                    <Button variant="secondary" size="lg" onClick={() => router.push('/news')}>
-                      Explore News <ArrowRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  </div>
+              <div className="relative h-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white">
+                <div className="text-center p-8">
+                  <h1 className="text-3xl md:text-5xl font-bold mb-4">Welcome to NewsHub</h1>
+                  <p className="text-lg md:text-xl mb-4 max-w-3xl">Stay updated with the latest news from around the world</p>
+                  <Button variant="secondary" size="lg" onClick={() => router.push('/news')}>
+                    Explore News <ArrowRight className="h-4 w-4 ml-1" />
+                  </Button>
                 </div>
-              )}
+              </div>
             </div>
           </section>
 
