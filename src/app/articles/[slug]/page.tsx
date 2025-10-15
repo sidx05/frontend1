@@ -24,7 +24,7 @@ export default async function ArticlePage({ params }: { params: any }) {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) return notFound();
     const json = await res.json();
-    let article = json?.data ?? json;
+    let article = json?.data ?? json?.article ?? json;
 
     if (!article) return notFound();
 

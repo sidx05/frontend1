@@ -85,27 +85,12 @@ function NewsPageContent() {
   useEffect(() => {
     const loadUncategorizedArticles = async () => {
       try {
-        const params = new URLSearchParams({
-          category: 'uncategorized',
-          sortBy: 'publishedAt',
-          sortOrder: 'desc'
-        });
-        
-        if (language !== 'all') {
-          params.append('lang', language);
-        }
-        
-        const response = await fetch(`/api/news?${params}`);
-        const data = await response.json();
-        
-        if (data.success && data.articles) {
-          setUncategorizedArticles(data.articles);
-        }
+        const data = await fetchArticles({ category: 'uncategorized', lang: language !== 'all' ? language : undefined, sortBy: 'publishedAt', sortOrder: 'desc' });
+        if (Array.isArray(data)) setUncategorizedArticles(data);
       } catch (error) {
         console.error('Error loading uncategorized articles:', error);
       }
     };
-    
     loadUncategorizedArticles();
   }, [language]);
 
@@ -135,11 +120,8 @@ function NewsPageContent() {
         params.append('search', searchTerm);
       }
 
-      const response = await fetch(`/api/news?${params}`);
-      const data = await response.json();
-
-      if (data.success) {
-        const fetchedArticles = data.articles || [];
+      const fetchedArticles = await fetchArticles(Object.fromEntries(params as any));
+      if (Array.isArray(fetchedArticles)) {
         setTotalPages(data.pagination?.pages || 1);
         
         // Separate articles by category and images
@@ -177,11 +159,7 @@ function NewsPageContent() {
 
   const loadCategories = async () => {
     try {
-      const url = language === 'all' ? '/api/categories' : `/api/categories?lang=${language}`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      const apiCats = data.success ? (data.categories || []) : [];
+      const apiCats = await fetchCategories(language !== 'all' ? language : undefined);
 
       // Canonical set used across the app; restrict Telugu as requested
       const defaultCategoryKeys = (
@@ -591,8 +569,8 @@ function NewsPageContent() {
                       
                       <CardContent className="p-6">
                         <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-                          <Link 
-                            href={`/articles/${mappedArticle.slug}`}
+                        <Link 
+                          href={`/articles/${mappedArticle.slug}`}
                             className="hover:text-primary transition-colors"
                           >
                             {mappedArticle.title}
