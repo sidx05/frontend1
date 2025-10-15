@@ -143,17 +143,19 @@ export default function HomePage() {
 
         for (const lang of languages) {
           try {
-            const langArticles = await fetch(`/api/news/latest?lang=${lang}&limit=6`).then(res => res.json());
-            const categories = await fetch(`/api/categories?lang=${lang}`).then(res => res.json());
-            
-            
-            if (langArticles.success && langArticles.articles.length > 0) {
-              const cats = categories.success ? (categories.categories || []) : [];
+            const [langArticlesArr, catsForLang] = await Promise.all([
+              fetchArticles({ lang, limit: 6 }),
+              fetchCategories(lang)
+            ]);
+
+            const langArticles = Array.isArray(langArticlesArr) ? langArticlesArr : [];
+            const cats = Array.isArray(catsForLang) ? catsForLang : [];
+
+            if (langArticles.length > 0) {
               // Normalize to ensure we always show the canonical set (even if 0 articles yet)
               const normalizedCats = defaultCategoryKeys.map((key) => {
                 const found = cats.find((c: any) => (c.key || '').toLowerCase() === key);
-                if (found) return found; // has { name: ObjectId, key, displayName, ... }
-                // Fallback stub uses key as the filter value (APIs accept string keys now)
+                if (found) return found;
                 return {
                   name: key,
                   key,
@@ -162,10 +164,9 @@ export default function HomePage() {
                 };
               });
               languageSectionsData.push({
-              language: lang,
-              displayName: getLanguageDisplayName(lang),
-              articles: langArticles.articles.map(mapArticleToUi),
-                // Always present canonical set; existing ones include ids, missing ones fall back to key
+                language: lang,
+                displayName: getLanguageDisplayName(lang),
+                articles: langArticles.map(mapArticleToUi),
                 categories: normalizedCats
               } as any);
             }
@@ -186,12 +187,9 @@ export default function HomePage() {
 
         // Load uncategorized articles
         try {
-          const uncategorizedResp = await fetch('/api/news?category=uncategorized');
-          const uncategorizedData = await uncategorizedResp.json();
-          if (uncategorizedData.success && uncategorizedData.articles) {
-            const mappedUncategorized = uncategorizedData.articles.map(mapArticleToUi);
-            if (mounted) setUncategorizedArticles(mappedUncategorized);
-          }
+          const uncategorized = await fetchArticles({ category: 'uncategorized', lang: 'en', limit: 6 });
+          const mappedUncategorized = (uncategorized || []).map(mapArticleToUi);
+          if (mounted) setUncategorizedArticles(mappedUncategorized);
         } catch (error) {
           console.error('Error loading uncategorized articles:', error);
         }
