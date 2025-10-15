@@ -122,7 +122,7 @@ function NewsPageContent() {
 
       const fetchedArticles = await fetchArticles(Object.fromEntries(params as any));
       if (Array.isArray(fetchedArticles)) {
-        setTotalPages(data.pagination?.pages || 1);
+        setTotalPages(1);
         
         // Separate articles by category and images
         const generalArticles = fetchedArticles.filter((article: any) => {
