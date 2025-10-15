@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
-import { logger } from "../../backend/src/utils/logger";
+
+// Local lightweight logger to avoid importing backend code into the frontend build
+const logger = {
+  info: (...args: any[]) => console.log(...args),
+  error: (...args: any[]) => console.error(...args),
+};
 
 export async function connectDB() {
   try {
@@ -8,7 +13,8 @@ export async function connectDB() {
     logger.info("✅ Connected to MongoDB (Mongoose)");
   } catch (err) {
     logger.error("❌ Failed to connect MongoDB", err);
-    process.exit(1);
+    // Do not exit the process in Next.js environments; let the caller handle errors
+    throw err;
   }
 }
 
