@@ -121,6 +121,7 @@ function NewsPageContent() {
       // Don't set limit - let the API use the settings default
 
       // Only add language parameter if it's not 'all'
+      // For Explore News (all), request multiple languages by not passing lang
       if (language !== 'all') {
         params.append('lang', language);
       }

@@ -114,7 +114,7 @@ export default function LangPage() {
   useEffect(() => {
     const loadUncategorized = async () => {
       try {
-        const url = new URL(`/api/news`, window.location.origin);
+        const url = new URL(`/api/public/articles`, window.location.origin);
         url.searchParams.set("lang", lang);
         url.searchParams.set("category", "uncategorized");
         url.searchParams.set("sortBy", "publishedAt");
@@ -149,7 +149,7 @@ export default function LangPage() {
     if (loading || done) return;
     setLoading(true);
     try {
-      const url = new URL(`/api/news`, window.location.origin);
+      const url = new URL(`/api/public/articles`, window.location.origin);
       url.searchParams.set("lang", lang);
       url.searchParams.set("page", String(page));
       url.searchParams.set("sortBy", "publishedAt");
