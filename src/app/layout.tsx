@@ -2,7 +2,6 @@ import React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "next-themes";
 import CookieConsent from "@/components/legal/cookie-consent";
 
 export const metadata: Metadata = {
@@ -34,16 +33,9 @@ export default function RootLayout({
       <body
         className="antialiased bg-background text-foreground"
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-          <CookieConsent />
-        </ThemeProvider>
+        {children}
+        <Toaster />
+        <CookieConsent />
       </body>
     </html>
   );
