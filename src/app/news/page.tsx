@@ -472,16 +472,16 @@ function NewsPageContent() {
               .slice(0, 8)
               .map((cat) => (
                 <Button 
-                  key={cat.name}
-                  variant={selectedCategory === cat.name ? 'default' : 'outline'} 
+                  key={cat.name || cat.key}
+                  variant={selectedCategory === (cat.key || cat.name) ? 'default' : 'outline'} 
                   size="sm"
                   onClick={() => {
-                    setSelectedCategory(cat.name);
+                    setSelectedCategory(cat.key || cat.name);
                     setCurrentPage(1);
                   }}
                   className="text-xs"
                 >
-                  {cat.displayName}
+                  {cat.displayName || cat.name || cat.key}
                 </Button>
               ))}
           </div>
@@ -521,8 +521,8 @@ function NewsPageContent() {
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
                   {categories.map((cat) => (
-                    <SelectItem key={cat.name} value={cat.name}>
-                      {cat.displayName || cat.name}
+                    <SelectItem key={cat.name || cat.key} value={(cat.key || cat.name)}>
+                      {cat.displayName || cat.name || cat.key}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -591,7 +591,7 @@ function NewsPageContent() {
                       <CardContent className="p-6">
                         <h3 className="text-lg font-semibold mb-2 line-clamp-2">
                           <Link 
-                            href={`/article/${mappedArticle.slug}`}
+                            href={`/articles/${mappedArticle.slug}`}
                             className="hover:text-primary transition-colors"
                           >
                             {mappedArticle.title}
@@ -736,7 +736,7 @@ function NewsPageContent() {
                     return (
                       <Link 
                         key={`text-${mappedArticle.id || `fallback-${index}`}-${index}`} 
-                        href={`/article/${mappedArticle.slug}`}
+                        href={`/articles/${mappedArticle.slug}`}
                         className="block group"
                       >
                         <div className="p-2 rounded-lg hover:bg-muted/50 transition-colors">
@@ -775,7 +775,7 @@ function NewsPageContent() {
                     return (
                       <Link 
                         key={`general-${mappedArticle.id || `fallback-${index}`}-${index}`} 
-                        href={`/article/${mappedArticle.id}`}
+                        href={`/articles/${mappedArticle.slug || mappedArticle.id}`}
                         className="block group"
                       >
                         <div className="p-2 rounded-lg hover:bg-muted/50 transition-colors">
@@ -814,7 +814,7 @@ function NewsPageContent() {
                     return (
                       <Link 
                         key={`uncategorized-${mappedArticle.id || `fallback-${index}`}-${index}`} 
-                        href={`/article/${mappedArticle.id}`}
+                        href={`/articles/${mappedArticle.slug || mappedArticle.id}`}
                         className="block group"
                       >
                         <div className="flex gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">

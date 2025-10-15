@@ -489,13 +489,13 @@ export default function HomePage() {
                         <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
                           <Badge variant="secondary" className="mb-4">{sanitizeText(article.category)}</Badge>
                           <h1 className="text-3xl md:text-5xl font-bold mb-4">
-                            <Link href={`/article/${article.slug}`} className="text-white no-underline">{article.title}</Link>
+                            <Link href={`/articles/${article.slug}`} className="text-white no-underline">{article.title}</Link>
                           </h1>
                           <p className="text-lg md:text-xl mb-4 max-w-3xl">{article.summary}</p>
                           <div className="flex items-center gap-4 text-sm">
                             <div className="flex items-center gap-1"><Clock className="h-4 w-4" />{article.time}</div>
                             <div className="flex items-center gap-1"><Eye className="h-4 w-4" />{article.readTime}</div>
-                            <Button variant="secondary" size="sm" onClick={() => router.push(`/article/${article.slug}`)}>
+                            <Button variant="secondary" size="sm" onClick={() => router.push(`/articles/${article.slug}`)}>
                               Read More <ArrowRight className="h-4 w-4 ml-1" />
                             </Button>
                           </div>
@@ -506,13 +506,13 @@ export default function HomePage() {
                         <div className="text-center p-8">
                           <Badge variant="secondary" className="mb-4">{sanitizeText(article.category)}</Badge>
                           <h1 className="text-3xl md:text-5xl font-bold mb-4">
-                            <Link href={`/article/${article.slug}`} className="text-white no-underline">{article.title}</Link>
+                            <Link href={`/articles/${article.slug}`} className="text-white no-underline">{article.title}</Link>
                           </h1>
                           <p className="text-lg md:text-xl mb-4 max-w-3xl">{article.summary}</p>
                           <div className="flex items-center gap-4 text-sm justify-center">
                             <div className="flex items-center gap-1"><Clock className="h-4 w-4" />{article.time}</div>
                             <div className="flex items-center gap-1"><Eye className="h-4 w-4" />{article.readTime}</div>
-                            <Button variant="secondary" size="sm" onClick={() => router.push(`/article/${article.slug}`)}>
+                            <Button variant="secondary" size="sm" onClick={() => router.push(`/articles/${article.slug}`)}>
                               Read More <ArrowRight className="h-4 w-4 ml-1" />
                             </Button>
                           </div>
@@ -657,10 +657,10 @@ export default function HomePage() {
                             key={cat.name}
                             variant="outline" 
                             size="sm"
-                            onClick={() => window.location.href = `/news?lang=${section.language}&category=${cat.name}`}
+                            onClick={() => window.location.href = `/news?lang=${section.language}&category=${encodeURIComponent(cat.key || cat.name)}`}
                             className="text-xs"
                           >
-                            {cat.displayName}
+                            {cat.displayName || cat.name || cat.key}
                           </Button>
                         ));
                       })()}
